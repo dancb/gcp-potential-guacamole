@@ -1,3 +1,5 @@
+# https://g.co/gemini/share/9133a4736de2
+
 # Configura el proveedor de Google Cloud
 provider "google" {
   project = var.gcp_project_id
