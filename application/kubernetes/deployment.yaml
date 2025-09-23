@@ -16,6 +16,6 @@ spec:
       - name: welcome-app-container
         # IMPORTANTE: Reemplaza esta URL con la de tu Artifact Registry
         # Formato: <region>-docker.pkg.dev/<project-id>/<repo-name>/<image-name>:<tag>
-        image: us-central1-docker.pkg.dev/elite-buttress-472417-g3/potential-guacamole-repo/welcome-app:1.0.0
+        image: us-central1-docker.pkg.dev/elite-buttress-472417-g3/potential-guacamole-repo/welcome-app:1.0.1
         ports:
         - containerPort: 8080
