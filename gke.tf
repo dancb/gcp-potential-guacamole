@@ -5,4 +5,6 @@ resource "google_container_cluster" "gke_cluster" {
   location = "us-central1"
 
   enable_autopilot = true
+
+  depends_on = [google_project_service.container]
 }
