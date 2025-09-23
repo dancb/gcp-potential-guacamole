@@ -1,4 +1,3 @@
----
 # Aplicación de Bienvenida para GKE
 
 Esta es una aplicación simple de Node.js y Express que sirve como ejemplo para ser desplegada en Google Kubernetes Engine (GKE).
@@ -108,4 +107,3 @@ Sigue estos pasos para desplegar la aplicación en el clúster de GKE.
     ```
     http://<EXTERNAL-IP>
     ```
-```
