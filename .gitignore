@@ -1,0 +1,37 @@
+# # # OpenTofu / Terraform # # #
+
+# Archivos de estado local y backups
+# Estos archivos contienen información sensible y el estado de tu infraestructura.
+# Siempre debes usar un backend remoto (como GCS o S3) en lugar de guardar el estado localmente.
+*.tfstate
+*.tfstate.backup
+
+# Archivos de logs de crash
+crash.log
+crash.*.log
+
+# Archivos generados por 'tofu init' y 'tofu plan'
+# El directorio .opentofu contiene los plugins de los proveedores y módulos.
+# Los planes pueden contener datos sensibles.
+.opentofu/
+.terraform/
+.terraform.lock.hcl
+*.tfplan
+
+# Archivos de variables que no deben ser versionados
+# El archivo terraform.tfvars.json también es sensible.
+*.tfvars
+*.tfvars.json
+*.auto.tfvars
+*.auto.tfvars.json
+
+# Override files
+# Estos son para sobreescrituras locales y no deben ser compartidos.
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Configuraciones locales de CLI
+.terraformrc
+terraform.rc
