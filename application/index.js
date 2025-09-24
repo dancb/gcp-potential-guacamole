@@ -21,7 +21,7 @@ async function getRegion() {
   } catch (error) {
     console.error('No se pudo obtener la región del servidor de metadatos:', error.message);
     // Este mensaje se mostrará si la app corre localmente o si hay un error.
-    return 'Región Desconocida';
+    return 'Región Desconocida - Error al obtener metadatos';
   }
 }
 
@@ -34,5 +34,5 @@ app.get('/', async (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`La aplicación está escuchando en el puerto ${port}`);
+    console.log(`La aplicación está escuchando en el puerto ${port}`);
 });
