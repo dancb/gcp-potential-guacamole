@@ -3,7 +3,6 @@
 # Configura el proveedor de Google Cloud
 provider "google" {
   project = var.gcp_project_id
-  region  = "us-central1"
 }
 
 # Data source para obtener información del proyecto actual
@@ -19,8 +18,10 @@ resource "google_compute_network" "vpc" {
 }
 
 resource "google_compute_subnetwork" "subnet" {
-  name          = "${var.project_name}-subnet"
-  ip_cidr_range = "10.10.1.0/24"
-  region        = "us-central1"
+  for_each = toset(var.gcp_regions)
+
+  name          = "${var.project_name}-subnet-${each.key}"
+  ip_cidr_range = var.subnet_cidrs[each.key]
+  region        = each.key
   network       = google_compute_network.vpc.id
 }

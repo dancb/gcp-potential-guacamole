@@ -36,3 +36,7 @@ override.tf.json
 # Configuraciones locales de CLI
 .terraformrc
 terraform.rc
+
+# # # macOS # # #
+# Archivos de metadatos del sistema operativo
+.DS_Store
