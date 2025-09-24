@@ -45,8 +45,7 @@ Sigue estos pasos para desplegar la aplicación en el clúster de GKE.
     ```bash
     export GCP_PROJECT_ID="elite-buttress-472417-g3"
     export GCP_REGION="us-central1"
-    # Usaremos una etiqueta nueva para asegurar la actualización, ej: 1.0.1
-    export IMAGE_TAG="${GCP_REGION}-docker.pkg.dev/${GCP_PROJECT_ID}/potential-guacamole-repo/welcome-app:1.0.1"
+    export IMAGE_TAG="${GCP_REGION}-docker.pkg.dev/${GCP_PROJECT_ID}/potential-guacamole-repo/welcome-app:1.0.2"
     ```
 
 2.  **Autentica Docker con Artifact Registry**:
