@@ -113,7 +113,31 @@ Sigue estos pasos para desplegar la aplicación en el clúster de GKE.
 
 ## 3. Troubleshooting Común
 
-Aquí se listan algunos problemas comunes que pueden surgir durante el despliegue y cómo resolverlos.
+Cuando un pod no llega al estado `Running`, sigue estos pasos para diagnosticar el problema.
+
+### Pasos Generales de Diagnóstico
+
+1.  **Verifica el estado del pod**:
+    Usa `kubectl get pods` para ver el estado general. La columna `STATUS` te dará la primera pista (`ImagePullBackOff`, `CrashLoopBackOff`, `Pending`, etc.).
+    ```bash
+    kubectl get pods -l app=welcome-app
+    ```
+
+2.  **Obtén detalles y eventos del pod**:
+    El comando `kubectl describe pod` es la herramienta más importante. Te muestra los eventos que llevaron al error.
+    ```bash
+    # Reemplaza <nombre-del-pod> con el nombre de un pod que esté fallando
+    kubectl describe pod <nombre-del-pod>
+    ```
+    Busca en la sección `Events` al final de la salida para ver mensajes de error detallados (ej. `Failed to pull image...`, `Back-off restarting failed container...`).
+
+3.  **Revisa los logs de la aplicación**:
+    Si el pod está en `CrashLoopBackOff` o `Error`, el problema está en tu aplicación. Los logs te dirán por qué.
+    ```bash
+    kubectl logs <nombre-del-pod>
+    ```
+
+Con la información de estos comandos, puedes usar las siguientes guías para resolver problemas específicos.
 
 ### Problema: `ImagePullBackOff` o `ErrImagePull`
 
@@ -122,7 +146,7 @@ Este error indica que Kubernetes no pudo descargar la imagen de Docker especific
 **Posibles causas y soluciones:**
 
 1.  **Imagen no encontrada en Artifact Registry:**
-    *   **Causa:** La imagen con la etiqueta especificada (`ej. :1.0.4`) no existe en el repositorio, o la URL en `deployment.yaml` es incorrecta. Esto puede ocurrir si la imagen no se construyó y subió correctamente, o si la etiqueta en el comando `docker buildx` no coincidió con la del `deployment.yaml`.
+    *   **Causa:** La imagen con la etiqueta especificada (ej. `:1.0.4`) no existe en el repositorio. Esto puede ocurrir si la imagen no se construyó y subió correctamente, o si la etiqueta en el comando `docker buildx` no coincidió con la del `deployment.yaml`. El comando `kubectl describe pod` mostrará un error `NotFound`.
     *   **Solución:**
         *   Verifica la URL de la imagen en `kubernetes/deployment.yaml`.
         *   Asegúrate de que la variable `$IMAGE_TAG` esté configurada correctamente (ej. `welcome-app:1.0.4`).
@@ -131,7 +155,7 @@ Este error indica que Kubernetes no pudo descargar la imagen de Docker especific
 
 2.  **Problema de arquitectura (`no match for platform in manifest`):**
     *   **Causa:** La imagen fue construida para una arquitectura diferente (ej. `arm64` en una Mac M1/M2) y los nodos de GKE (`amd64`) no encuentran una versión compatible.
-    *   **Solución:** Asegúrate de usar `docker buildx build --platform linux/amd64 ...` al construir la imagen. Este problema se resuelve al seguir el "Paso A.3" de este documento.
+    *   **Solución:** Asegúrate de usar `docker buildx build --platform linux/amd64 ...` al construir la imagen. El comando `kubectl describe pod` mostrará este error específico.
 
 3.  **Permisos insuficientes:**
     *   **Causa:** La cuenta de servicio de GKE no tiene permisos para leer imágenes de Artifact Registry.
@@ -155,7 +179,7 @@ Este error indica que el contenedor se inicia, pero la aplicación dentro de él
 1.  **Error en el código de la aplicación:**
     *   **Causa:** La aplicación Node.js tiene un error que provoca su cierre inesperado al inicio (ej. dependencia faltante, error de configuración, puerto incorrecto, etc.).
     *   **Solución:**
-        *   Revisa los logs del pod para ver el mensaje de error exacto: `kubectl logs <nombre-del-pod>`.
+        *   Revisa los logs del pod para ver el mensaje de error exacto con `kubectl logs <nombre-del-pod>`.
         *   Asegúrate de que todas las dependencias necesarias (como `axios`) estén en la sección `dependencies` de `package.json`, no en `devDependencies`.
         *   Reconstruye y sube la imagen con una nueva etiqueta después de corregir el código.
 
